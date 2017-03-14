@@ -1,18 +1,28 @@
 var number = getNumber();
 var statusShowAxes = true;
+var statusRotation = false;
 
-var rotateStatus = false;
-
-function getRotateStatus() {
-    return rotateStatus;
+// Fonction permettant d'obtenir le statut de l'affichage des axes
+function getRotationStatus() {
+    return statusRotation;
 }
 
-function fnStartRotate() {
-    rotateStatus = true;
+// Fonction permettant de cacher les axes
+function startRotation() {
+    statusRotation = true;
 }
 
-function fnStopRotate() {
-    rotateStatus = false;
+// Fonction permettant d'afficher les axes
+function stopRotation() {
+    statusRotation = false;
+}
+
+// Fonction permettant de changer le status de statusShowAxes
+function checkRotation(value) {
+    if(value)
+        startRotation();
+    else
+        stopRotation();
 }
 
 // Fonction permettant d'obtenir le statut de l'affichage des axes

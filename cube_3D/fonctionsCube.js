@@ -5,3 +5,8 @@ function setLedColor(x, y, z, c) {
         leds[x][y][z].setColor(c);
     }
 }
+
+function setLedColorPos(pos) {
+    setLedColor(pos.x, pos.y, pos.z, pos.color);
+}
+

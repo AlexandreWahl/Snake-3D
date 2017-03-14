@@ -6,7 +6,7 @@ function Led(x, y, z) {
     this.radius = 0.5;
     this.size = 10;
     this.sphere = "";
-    this.opacity = 0.15;
+    this.opacity = 0.10;
     this.isOff = true;
 
     this.create = function () {

@@ -1,50 +1,36 @@
-init();
-animate();
 
-var number = getNumber();
+var number = 13;
+
+init(number);
+animate();
 
 var candy = new Candy("red", number);
 candy.create();
+candy.draw();
 
 var snake = new Snake("blue", "green", number);
 snake.create();
 
-var moove = setInterval(function() {
-    if(!snake.moove()) {
-        clearInterval(moove);
-    };
-}, snake.getSpeed());
+var update = setInterval(function() {
+    if(snake.eat()) {
+        candy.create();
+        candy.draw();
+    }
+    snake.update();
+}, 1000);
 
 $(window).keypress(function(e) {
-    if(e.which == 115) { // S
-        if(snake.getAxe != "z") {
-            snake.setAxe("z");
-            snake.setDirection(-1);
-        }
-    } else if(e.which == 119) { // W
-        if(snake.getAxe != "z") {
-            snake.setAxe("z");
-            snake.setDirection(1);
-        }
+    if(e.which == 119) { // W
+        snake.direction(0, 0, -1);
+    } else if(e.which == 115) { // S
+        snake.direction(0, 0, 1);
     } else if(e.which == 100) { // D
-        if(snake.getAxe != "x") {
-            snake.setAxe("x");
-            snake.setDirection(-1);
-        }
+        snake.direction(1, 0, 0);
     } else if(e.which == 97) { // A
-        if(snake.getAxe != "x") {
-            snake.setAxe("x");
-            snake.setDirection(1);
-        }
+        snake.direction(-1, 0, 0);
     } else if(e.which == 117) { // U
-        if(snake.getAxe != "y") {
-            snake.setAxe("y");
-            snake.setDirection(-1);
-        }
+        snake.direction(0, 1, 0);
     } else if(e.which == 104) { // H
-        if(snake.getAxe != "y") {
-            snake.setAxe("y");
-            snake.setDirection(1);
-        }
+        snake.direction(0, -1, 0);
     }
 });

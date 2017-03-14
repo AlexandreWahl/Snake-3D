@@ -1,188 +1,84 @@
 function Snake(color, headColor, cubeSize) {
-    this.pos = {
-        x : 0,
-        y : 0,
-        z : 0,
-        x0 : 0,
-        y0 : 0,
-        z0 : 0
-    };
     this.color = color;
     this.headColor = headColor;
-    this.size = 3;
-    this.speed = 3;
-    this.axes = ["x", "y", "z"];
-    this.axe = "";
-    this.direction = 1;
     this.cubeSize = cubeSize;
+    this.size = 3;
+    this.speed = {
+        x : 0,
+        y : 0,
+        z : 0
+    };
+    this.axes = ["x", "y", "z"];
     this.body = [];
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+
 
     this.create = function () {
-        this.pos.x0 = Math.floor((Math.random() * this.cubeSize) + 1) -1;
-        this.pos.y0 = Math.floor((Math.random() * this.cubeSize) + 1) -1;
-        this.pos.z0 = Math.floor((Math.random() * this.cubeSize) + 1) -1;
+        var random = Math.floor((Math.random() * 3));
+        var axe = this.axes[random];
+        this.speed[axe] = Math.random() >= 0.5 ? 1 : -1;
 
-        this.axe = this.axes[Math.floor((Math.random() * 2))];
+        this.x = Math.floor(cubeSize/2);
+        this.y = Math.floor(cubeSize/2);
+        this.z = Math.floor(cubeSize/2);
 
-        this.axe = "x";
+        this.body[0] = {
+            x : this.x,
+            y : this.y,
+            z : this.z,
+            color : this.headColor
+        };
+        setLedColorPos(this.body[0]);
 
-        switch(this.axe) {
-            case "x" :
-                if(this.pos.x0 > cubeSize / 2) {
-                    this.direction = -1;
-                } else if(this.pos.x0 <= cubeSize / 2) {
-                    this.direction = 1;
-                }
-
-                for (var i = 0; i < this.size; i++) {
-                    if(i == 0) {
-                        setLedColor(this.pos.x0, this.pos.y0, this.pos.z0, this.headColor);
-                        this.body[i] = {
-                            x : this.pos.x0,
-                            y : this.pos.y0,
-                            z : this.pos.z0,
-                            color : this.headColor
-                        }
-                    } else {
-                        setLedColor(this.pos.x0 + i*this.direction, this.pos.y0, this.pos.z0, this.color);
-                        this.body[i] = {
-                            x : this.pos.x0 + i*this.direction,
-                            y : this.pos.y0,
-                            z : this.pos.z0,
-                            color : this.color
-                        }
-                    }
-                }
-                break;
-            case "y" :
-                if(this.y0 > cubeSize / 2) {
-                    this.direction = 1;
-                } else if(this.y0 <= cubeSize / 2) {
-                    this.direction = -1;
-                }
-
-                for (var i = 0; i < this.size; i++) {
-                    if(i == this.size -1) {
-                        setLedColor(this.pos.x0, this.pos.y0 + i*this.direction, this.pos.z0, this.headColor);
-                        this.body[i] = {
-                            x : this.pos.x0,
-                            y : this.pos.y0 + i*this.direction,
-                            z : this.pos.z0,
-                            color : this.headColor
-                        }
-                    } else {
-                        setLedColor(this.pos.x0, this.pos.y0 + i*this.direction, this.pos.z0, this.color);
-                        this.body[i] = {
-                            x : this.pos.x0,
-                            y : this.pos.y0 + i*this.direction,
-                            z : this.pos.z0,
-                            color : this.color
-                        }
-                    }
-                }
-                break;
-            case "z" :
-                if(this.z0 > cubeSize / 2) {
-                    this.direction = -1;
-                } else if(this.z0 <= cubeSize / 2) {
-                    this.direction = 1;
-                }
-
-                for (var i = 0; i < this.size; i++) {
-                    if(i == this.size -1) {
-                        setLedColor(this.pos.x0, this.pos.y0, this.pos.z0 + i*this.direction, this.headColor);
-                        this.body[i] = {
-                            x : this.pos.x0,
-                            y : this.pos.y0,
-                            z : this.pos.z0 + i*this.direction,
-                            color : this.headColor
-                        }
-                    } else {
-                        setLedColor(this.pos.x0, this.pos.y0, this.pos.z0 + i*this.direction, this.color);
-                        this.body[i] = {
-                            x : this.pos.x0,
-                            y : this.pos.y0,
-                            z : this.pos.z0 + i*this.direction,
-                            color : this.color
-                        }
-                    }
-                }
-                break;
-            default :
-                break;
+        for (var i = 1; i < this.size; i++) {
+            this.body[i] = {
+                x : this.x + this.speed.x * i,
+                y : this.y + this.speed.y * i,
+                z : this.z + this.speed.z * i,
+                color : this.color
+            };
+            setLedColorPos(this.body[i]);
         }
     };
 
-    this.moove = function() {
-        clearAll();
+    this.update = function() {
+        if(this.size === this.body.length)
+            leds[this.body[this.body.length-1].x][this.body[this.body.length-1].y][this.body[this.body.length-1].z].turnOff();
 
-        switch(this.axe) {
-            case "x" :
-                for (var i = 0; i < this.size; i++) {
-                    if(this.body[i].x + this.direction == this.cubeSize) {
-                        clearAll();
-                        return false;
-                    }
-                    setLedColor(this.body[i].x + this.direction, this.body[i].y, this.body[i].z, this.body[i].color);
-                    this.body[i] = {
-                        x : this.body[i].x + this.direction,
-                        y : this.body[i].y,
-                        z : this.body[i].z,
-                        color : this.body[i].color
-                    }
-                }
-                return true;
-                break;
-            case "y" :
-                for (var i = 0; i < this.size; i++) {
-                    if(this.body[i].y + this.direction == this.cubeSize) {
-                        clearAll();
-                        return false;
-                    }
-                    setLedColor(this.body[i].x, this.body[i].y + this.direction, this.body[i].z, this.body[i].color)
-                    this.body[i] = {
-                        x : this.body[i].x,
-                        y : this.body[i].y + this.direction,
-                        z : this.body[i].z,
-                        color : this.body[i].color
-                    }
-                }
-                return true;
-                break;
-            case "z" :
-                for (var i = 0; i < this.size; i++) {
-                    if(this.body[i].z + this.direction == this.cubeSize) {
-                        clearAll();
-                        return false;
-                    }
-                    setLedColor(this.body[i].x, this.body[i].y, this.body[i].z + this.direction, this.body[i].color)
-                    this.body[i] = {
-                        x : this.body[i].x,
-                        y : this.body[i].y,
-                        z : this.body[i].z + this.direction,
-                        color : this.body[i].color
-                    }
-                }
-                return true;
-                break;
-            default :
-                break;
+        for (var i = this.body.length-1; i > 0; i--) {
+            this.body[i].x = this.body[i - 1].x;
+            this.body[i].y = this.body[i - 1].y;
+            this.body[i].z = this.body[i - 1].z;
+            this.body[i].color = this.color;
+            setLedColorPos(this.body[i]);
+        }
+
+
+        this.body[0] = {
+            x : this.body[0].x - this.speed.x,
+            y : this.body[0].y - this.speed.y,
+            z : this.body[0].z - this.speed.z,
+            color : this.headColor
+        };
+        setLedColorPos(this.body[0]);
+    };
+
+    this.eat = function() {
+        var led = leds[this.body[0].x - this.speed.x][this.body[0].y - this.speed.y][this.body[0].z - this.speed.z];
+
+        if(led.getColor().r == 1 && led.getColor().g == 0 && led.getColor().b == 0) {
+            this.size++;
+            return true;
+        } else {
+            return false;
         }
     };
 
-    this.getSpeed = function() {
-        return this.speed * 1000;
-    };
-
-    this.getAxe = function() {
-        return this.axe;
-    };
-
-    this.setAxe = function(axe) {
-        this.axe = axe;
-    };
-
-    this.setDirection = function(direction) {
-        this.direction = direction;
+    this.direction = function(x, y, z) {
+        this.speed.x = x;
+        this.speed.y = y;
+        this.speed.z = z;
     };
 }

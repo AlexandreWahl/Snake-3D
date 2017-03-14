@@ -4,14 +4,14 @@ var camera, scene, renderer, controls, axes;
 var w = 1000;
 var h = 1000;
 var size = 40;
-var number = 10;
+// var number = 13;
 var leds = "";
 
 function getNumber() {
     return number;
 }
 
-function init() {
+function init(number) {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(50, w / h, 1, 10000);
     camera.position.set(19.7, 37.7, 90.5).setLength(100);
@@ -20,9 +20,11 @@ function init() {
     renderer.setSize(w, h);
     document.body.appendChild(renderer.domElement);
 
+    scene.background = new THREE.Color("#5d6168");
+
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableKeys = false;
-    controls.enablePan = false;
+    // controls.enableKeys = false;
+    // controls.enablePan = false;
     controls.enableZoom = false;
     controls.enableRotate = true;
     controls.rotateSpeed = 0.5;
@@ -48,7 +50,7 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
 
-    if(getRotateStatus()) {
+    if(getRotationStatus()) {
         scene.rotation.x += 0;
         scene.rotation.y += 0.005;
         scene.rotation.z += 0;

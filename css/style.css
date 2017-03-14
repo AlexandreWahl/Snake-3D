@@ -13,3 +13,9 @@ canvas {
     margin-left : 25px;
     margin-top : 25px;
 }
+
+#checkRotation {
+    position : absolute;
+    margin-left : 50px;
+    margin-top : 25px;
+}
