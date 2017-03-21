@@ -51,9 +51,9 @@ function animate() {
     requestAnimationFrame(animate);
 
     if(getRotationStatus()) {
-        scene.rotation.x += 0;
-        scene.rotation.y += 0.005;
-        scene.rotation.z += 0;
+        scene.rotation.x += 0.02;
+        scene.rotation.y += 0.02;
+        scene.rotation.z += 0.02;
     }
 
     if(getAxesStatus()) {
